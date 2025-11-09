@@ -13,13 +13,14 @@
     <a href="index.html">الرئيسية</a>
     <a href="workout.html">التمارين</a>
     <a href="nutrition.html">التغذية</a>
+    <a href="rest.html">الراحة</a>
     <a href="progress.html">المتابعة</a>
     <a href="stats.html" class="active">الإحصائيات</a>
   </nav>
 </header>
 
 <section class="card">
-  <h2>وزنك خلال الشهر</h2>
+  <h2>وزنك</h2>
   <canvas id="weightChart"></canvas>
 </section>
 
@@ -28,31 +29,59 @@
   <canvas id="caloriesChart"></canvas>
 </section>
 
+<section class="card">
+  <h2>عدد التمارين</h2>
+  <canvas id="workoutsChart"></canvas>
+</section>
+
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
+const user = localStorage.getItem("loggedInUser") || "guest";
+
+// جلب البيانات المخزنة من progress.html
+const weight = localStorage.getItem(user + "_weight") || 0;
+const calories = localStorage.getItem(user + "_calories") || 0;
+const workouts = localStorage.getItem(user + "_workouts") || 0;
+
+// رسم بياني للوزن
 const weightCtx = document.getElementById('weightChart').getContext('2d');
 new Chart(weightCtx, {
   type: 'line',
   data: {
-    labels: ['الأسبوع 1','الأسبوع 2','الأسبوع 3','الأسبوع 4'],
+    labels: ['اليوم'],
     datasets: [{
       label: 'الوزن (كجم)',
-      data: [80, 78.5, 78, 77.5],
+      data: [weight],
       borderColor: '#0ea5e9',
       fill: false
     }]
   }
 });
 
+// رسم بياني للسعرات
 const caloriesCtx = document.getElementById('caloriesChart').getContext('2d');
 new Chart(caloriesCtx, {
   type: 'bar',
   data: {
-    labels: ['الاثنين','الثلاثاء','الأربعاء','الخميس','الجمعة'],
+    labels: ['اليوم'],
     datasets: [{
       label: 'السعرات (كالوري)',
-      data: [2200, 2000, 2100, 2300, 1900],
+      data: [calories],
       backgroundColor: '#22c55e'
+    }]
+  }
+});
+
+// رسم بياني لعدد التمارين
+const workoutsCtx = document.getElementById('workoutsChart').getContext('2d');
+new Chart(workoutsCtx, {
+  type: 'doughnut',
+  data: {
+    labels: ['تمارين اليوم'],
+    datasets: [{
+      label: 'عدد التمارين',
+      data: [workouts],
+      backgroundColor: ['#f97316']
     }]
   }
 });
