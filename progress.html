@@ -96,3 +96,12 @@ drawChart();
 
 </body>
 </html>
+<script>
+const user = localStorage.getItem("loggedInUser");
+if(!user){
+  alert("⚠️ لازم تسجل دخول الأول");
+  window.location.href = "login.html";
+} else {
+  document.body.innerHTML += `<p>أهلاً ${user} 👋، ده تقدمك الحالي:</p>`;
+}
+</script>
