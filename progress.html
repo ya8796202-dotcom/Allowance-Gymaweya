@@ -57,3 +57,35 @@ document.getElementById("progressForm").addEventListener("submit", function(e){
 
 </body>
 </html>
+
+
+
+<script>
+const user = localStorage.getItem("loggedInUser") || "guest";
+
+document.getElementById("progressForm").addEventListener("submit", function(e){
+  e.preventDefault();
+
+  const weight = document.getElementById("weightInput").value;
+  const calories = document.getElementById("caloriesInput").value;
+  const workouts = document.getElementById("workoutsInput").value;
+
+  // جلب السجلات القديمة أو إنشاء جديدة
+  let weightHistory = JSON.parse(localStorage.getItem(user + "_weightHistory")) || [];
+  let caloriesHistory = JSON.parse(localStorage.getItem(user + "_caloriesHistory")) || [];
+  let workoutsHistory = JSON.parse(localStorage.getItem(user + "_workoutsHistory")) || [];
+
+  // إضافة القيم الجديدة
+  weightHistory.push(weight);
+  caloriesHistory.push(calories);
+  workoutsHistory.push(workouts);
+
+  // حفظ السجلات
+  localStorage.setItem(user + "_weightHistory", JSON.stringify(weightHistory));
+  localStorage.setItem(user + "_caloriesHistory", JSON.stringify(caloriesHistory));
+  localStorage.setItem(user + "_workoutsHistory", JSON.stringify(workoutsHistory));
+
+  alert("✅ تم حفظ التقدم بنجاح!");
+  window.location.href = "stats.html";
+});
+</script>
