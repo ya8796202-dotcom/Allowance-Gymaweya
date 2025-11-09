@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>🍎 التغذية — موقع ياسر الرياضي</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+  <h1>🍎 خطة التغذية اليومية</h1>
+  <nav>
+    <a href="index.html">الرئيسية</a>
+    <a href="workouts.html">التمارين</a>
+    <a href="nutrition.html" class="active">التغذية</a>
+    <a href="recovery.html">الراحة</a>
+    <a href="progress.html">المتابعة</a>
+  </nav>
+</header>
+
+<section class="hero">
+  <h2>التغذية = 70% من النجاح 💪</h2>
+  <p>هنا هتلاقي خطة وجبات متوازنة + جدول سعرات + حاسبة تفاعلية.</p>
+</section>
+
+<!-- 🥣 الإفطار -->
+<section class="card">
+  <h3>🥣 الإفطار</h3>
+  <table>
+    <tr><th>الوجبة</th><th>السعرات</th><th>بروتين</th><th>كارب</th><th>دهون</th></tr>
+    <tr><td>شوفان + لبن + موز</td><td>350</td><td>12g</td><td>55g</td><td>8g</td></tr>
+    <tr><td>3 بيض مسلوق</td><td>210</td><td>18g</td><td>2g</td><td>14g</td></tr>
+    <tr><td>مكسرات (30g)</td><td>180</td><td>6g</td><td>6g</td><td>15g</td></tr>
+  </table>
+</section>
+
+<!-- 🍗 الغداء -->
+<section class="card">
+  <h3>🍗 الغداء</h3>
+  <table>
+    <tr><th>الوجبة</th><th>السعرات</th><th>بروتين</th><th>كارب</th><th>دهون</th></tr>
+    <tr><td>صدر دجاج مشوي (150g)</td><td>280</td><td>45g</td><td>0g</td><td>6g</td></tr>
+    <tr><td>أرز بني (150g)</td><td>170</td><td>4g</td><td>36g</td><td>1g</td></tr>
+    <tr><td>سلطة خضراء</td><td>80</td><td>3g</td><td>10g</td><td>3g</td></tr>
+  </table>
+</section>
+
+<!-- 🥗 العشاء -->
+<section class="card">
+  <h3>🥗 العشاء</h3>
+  <table>
+    <tr><th>الوجبة</th><th>السعرات</th><th>بروتين</th><th>كارب</th><th>دهون</th></tr>
+    <tr><td>تونة (علبة)</td><td>150</td><td>30g</td><td>0g</td><td>2g</td></tr>
+    <tr><td>خضار مطهو</td><td>100</td><td>4g</td><td>18g</td><td>2g</td></tr>
+    <tr><td>زبادي خالي الدسم</td><td>90</td><td>9g</td><td>12g</td><td>0g</td></tr>
+  </table>
+</section>
+
+<!-- 🍏 سناك -->
+<section class="card">
+  <h3>🍏 سناك</h3>
+  <table>
+    <tr><th>الوجبة</th><th>السعرات</th><th>بروتين</th><th>كارب</th><th>دهون</th></tr>
+    <tr><td>تفاح</td><td>95</td><td>0g</td><td>25g</td><td>0g</td></tr>
+    <tr><td>بروتين شيك</td><td>200</td><td>25g</td><td>10g</td><td>3g</td></tr>
+    <tr><td>لوز (30g)</td><td>170</td><td>6g</td><td>6g</td><td>14g</td></tr>
+  </table>
+</section>
+
+<!-- 💧 نصائح -->
+<section class="card">
+  <h3>💧 نصائح إضافية</h3>
+  <ul>
+    <li>اشرب 2–3 لتر ماء يوميًا.</li>
+    <li>قلل السكريات والدهون المشبعة.</li>
+    <li>وزّع وجباتك على مدار اليوم.</li>
+  </ul>
+</section>
+
+<!-- 🔢 الحاسبة -->
+<section class="card">
+  <h3>🔢 حاسبة السعرات اليومية</h3>
+  <label>الوزن (كجم):</label>
+  <input type="number" id="weight" placeholder="مثال: 75">
+  
+  <label>الطول (سم):</label>
+  <input type="number" id="height" placeholder="مثال: 175">
+  
+  <label>العمر (سنة):</label>
+  <input type="number" id="age" placeholder="مثال: 25">
+  
+  <label>مستوى النشاط:</label>
+  <select id="activity">
+    <option value="1.2">قليل جدًا</option>
+    <option value="1.375">خفيف</option>
+    <option value="1.55">متوسط</option>
+    <option value="1.725">عالي</option>
+    <option value="1.9">شديد جدًا</option>
+  </select>
+  
+  <button class="btn primary" onclick="calcCalories()">احسب</button>
+  
+  <div id="result" style="margin-top:15px;"></div>
+</section>
+
+<script>
+function calcCalories(){
+  const w = parseFloat(document.getElementById('weight').value);
+  const h = parseFloat(document.getElementById('height').value);
+  const a = parseFloat(document.getElementById('age').value);
+  const act = parseFloat(document.getElementById('activity').value);
+
+  if(!w || !h || !a){ alert("من فضلك أدخل كل البيانات"); return; }
+
+  // معادلة Mifflin-St Jeor
+  let bmr = (10*w) + (6.25*h) - (5*a) + 5; // للرجال
+  let calories = bmr * act;
+
+  // تقسيم الماكروز (30% بروتين، 50% كارب، 20% دهون)
+  let protein = (calories * 0.3) / 4;
+  let carbs   = (calories * 0.5) / 4;
+  let fats    = (calories * 0.2) / 9;
+
+  document.getElementById('result').innerHTML = `
+    <p>🔥 السعرات اليومية: <strong>${Math.round(calories)}</strong> كالوري</p>
+    <p>💪 بروتين: <strong>${Math.round(protein)} جم</strong></p>
+    <p>🍚 كارب: <strong>${Math.round(carbs)} جم</strong></p>
+    <p>🥑 دهون: <strong>${Math.round(fats)} جم</strong></p>
+  `;
+}
+</script>
+
+</body>
+</html>
