@@ -1,3 +1,4 @@
+/* الخط الأساسي */
 body {
   font-family: 'Cairo', Tahoma, sans-serif;
   background: #f9f9f9;
@@ -6,27 +7,50 @@ body {
   color: #333;
 }
 
+/* الهيدر */
 header {
-  background: #0ea5e9;
+  background: linear-gradient(to right, #0ea5e9, #22c55e);
   color: white;
-  padding: 15px;
+  padding: 20px;
   text-align: center;
+}
+
+header h1 {
+  margin: 0;
+  font-size: 28px;
+}
+
+nav {
+  margin-top: 10px;
 }
 
 nav a {
   color: white;
-  margin: 0 10px;
+  margin: 0 12px;
   text-decoration: none;
   font-weight: bold;
+  transition: color 0.3s;
 }
 
+nav a:hover, nav a.active {
+  color: #ffeb3b;
+}
+
+/* البانر */
 .hero {
   text-align: center;
-  padding: 40px;
+  padding: 50px 20px;
   background: linear-gradient(to right, #22c55e, #0ea5e9);
   color: white;
+  border-radius: 0 0 20px 20px;
 }
 
+.hero h2 {
+  margin-bottom: 10px;
+  font-size: 26px;
+}
+
+/* الشبكة */
 .grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -34,18 +58,26 @@ nav a {
   padding: 20px;
 }
 
+/* الكروت */
 .card {
   background: white;
-  border-radius: 10px;
+  border-radius: 12px;
   padding: 20px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-  transition: transform 0.3s;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  transition: transform 0.3s, box-shadow 0.3s;
 }
 
 .card:hover {
   transform: translateY(-5px);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.15);
 }
 
+.card h3 {
+  margin-top: 0;
+  color: #0ea5e9;
+}
+
+/* الأزرار */
 .btn {
   display: inline-block;
   background: #22c55e;
@@ -53,8 +85,22 @@ nav a {
   padding: 10px 15px;
   border-radius: 8px;
   text-decoration: none;
+  transition: background 0.3s;
 }
 
+.btn:hover {
+  background: #16a34a;
+}
+
+.btn.primary {
+  background: #0ea5e9;
+}
+
+.btn.primary:hover {
+  background: #0284c7;
+}
+
+/* الجداول */
 table {
   width: 100%;
   border-collapse: collapse;
@@ -70,4 +116,34 @@ table th, table td {
 table th {
   background: #0ea5e9;
   color: white;
+}
+
+table tr:nth-child(even) {
+  background: #f1f5f9;
+}
+
+/* الإدخالات */
+input, select {
+  width: 100%;
+  padding: 8px;
+  margin: 8px 0;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+}
+/* خلفية متدرجة متحركة */
+body {
+  font-family: 'Cairo', Tahoma, sans-serif;
+  margin: 0;
+  padding: 0;
+  color: #333;
+  background: linear-gradient(-45deg, #0ea5e9, #22c55e, #facc15, #ef4444);
+  background-size: 400% 400%;
+  animation: gradientBG 12s ease infinite;
+}
+
+/* حركة الخلفية */
+@keyframes gradientBG {
+  0% {background-position: 0% 50%;}
+  50% {background-position: 100% 50%;}
+  100% {background-position: 0% 50%;}
 }
