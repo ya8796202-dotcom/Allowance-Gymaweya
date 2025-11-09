@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>📊 الإحصائيات</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+  <h1>📊 إحصائيات التقدم</h1>
+  <nav>
+    <a href="index.html">الرئيسية</a>
+    <a href="workout.html">التمارين</a>
+    <a href="nutrition.html">التغذية</a>
+    <a href="progress.html">المتابعة</a>
+    <a href="stats.html" class="active">الإحصائيات</a>
+  </nav>
+</header>
+
+<section class="card">
+  <h2>وزنك خلال الشهر</h2>
+  <canvas id="weightChart"></canvas>
+</section>
+
+<section class="card">
+  <h2>السعرات اليومية</h2>
+  <canvas id="caloriesChart"></canvas>
+</section>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+const weightCtx = document.getElementById('weightChart').getContext('2d');
+new Chart(weightCtx, {
+  type: 'line',
+  data: {
+    labels: ['الأسبوع 1','الأسبوع 2','الأسبوع 3','الأسبوع 4'],
+    datasets: [{
+      label: 'الوزن (كجم)',
+      data: [80, 78.5, 78, 77.5],
+      borderColor: '#0ea5e9',
+      fill: false
+    }]
+  }
+});
+
+const caloriesCtx = document.getElementById('caloriesChart').getContext('2d');
+new Chart(caloriesCtx, {
+  type: 'bar',
+  data: {
+    labels: ['الاثنين','الثلاثاء','الأربعاء','الخميس','الجمعة'],
+    datasets: [{
+      label: 'السعرات (كالوري)',
+      data: [2200, 2000, 2100, 2300, 1900],
+      backgroundColor: '#22c55e'
+    }]
+  }
+});
+</script>
+
+</body>
+</html>
