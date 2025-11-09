@@ -89,3 +89,53 @@ new Chart(workoutsCtx, {
 
 </body>
 </html>
+
+
+<script>
+const user = localStorage.getItem("loggedInUser") || "guest";
+
+// جلب السجلات
+const weightHistory = JSON.parse(localStorage.getItem(user + "_weightHistory")) || [];
+const caloriesHistory = JSON.parse(localStorage.getItem(user + "_caloriesHistory")) || [];
+const workoutsHistory = JSON.parse(localStorage.getItem(user + "_workoutsHistory")) || [];
+
+// رسم بياني للوزن
+new Chart(document.getElementById('weightChart'), {
+  type: 'line',
+  data: {
+    labels: weightHistory.map((_, i) => "اليوم " + (i+1)),
+    datasets: [{
+      label: 'الوزن (كجم)',
+      data: weightHistory,
+      borderColor: '#0ea5e9',
+      fill: false
+    }]
+  }
+});
+
+// رسم بياني للسعرات
+new Chart(document.getElementById('caloriesChart'), {
+  type: 'bar',
+  data: {
+    labels: caloriesHistory.map((_, i) => "اليوم " + (i+1)),
+    datasets: [{
+      label: 'السعرات (كالوري)',
+      data: caloriesHistory,
+      backgroundColor: '#22c55e'
+    }]
+  }
+});
+
+// رسم بياني للتمارين
+new Chart(document.getElementById('workoutsChart'), {
+  type: 'doughnut',
+  data: {
+    labels: ["إجمالي التمارين"],
+    datasets: [{
+      label: 'عدد التمارين',
+      data: [workoutsHistory.reduce((a,b)=>a+parseInt(b),0)],
+      backgroundColor: ['#f97316']
+    }]
+  }
+});
+</script>
