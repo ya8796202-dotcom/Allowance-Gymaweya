@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>📊 المتابعة — موقع ياسر الرياضي</title>
+  <link rel="stylesheet" href="style.css">
+  <!-- مكتبة الرسم البياني Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+<header>
+  <h1>📊 متابعة التقدم</h1>
+  <nav>
+    <a href="index.html">الرئيسية</a>
+    <a href="workouts.html">التمارين</a>
+    <a href="nutrition.html">التغذية</a>
+    <a href="recovery.html">الراحة</a>
+    <a href="progress.html" class="active">المتابعة</a>
+  </nav>
+</header>
+
+<section class="hero">
+  <h2>سجل وزنك وعداتك وشوف تطورك 💪</h2>
+</section>
+
+<section class="card">
+  <h3>📝 سجل بياناتك</h3>
+  <label>الوزن (كجم):</label>
+  <input type="number" id="weight" placeholder="مثال: 75">
+
+  <label>عدد التكرارات (مثال Bench Press):</label>
+  <input type="number" id="reps" placeholder="مثال: 10">
+
+  <button class="btn primary" onclick="saveProgress()">احفظ</button>
+</section>
+
+<section class="card">
+  <h3>📊 الرسم البياني للتقدم</h3>
+  <canvas id="progressChart" width="400" height="200"></canvas>
+</section>
+
+<script>
+function saveProgress(){
+  const w = document.getElementById('weight').value;
+  const r = document.getElementById('reps').value;
+
+  if(!w || !r){ alert("من فضلك أدخل البيانات"); return; }
+
+  // حفظ في localStorage
+  let logs = JSON.parse(localStorage.getItem("yasser_progress")) || [];
+  logs.push({date: new Date().toLocaleDateString(), weight: w, reps: r});
+  localStorage.setItem("yasser_progress", JSON.stringify(logs));
+
+  drawChart();
+}
+
+function drawChart(){
+  let logs = JSON.parse(localStorage.getItem("yasser_progress")) || [];
+  let dates = logs.map(l => l.date);
+  let weights = logs.map(l => l.weight);
+  let reps = logs.map(l => l.reps);
+
+  const ctx = document.getElementById('progressChart').getContext('2d');
+  new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: dates,
+      datasets: [
+        {
+          label: 'الوزن (كجم)',
+          data: weights,
+          borderColor: '#0ea5e9',
+          fill: false
+        },
+        {
+          label: 'التكرارات',
+          data: reps,
+          borderColor: '#22c55e',
+          fill: false
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { position: 'bottom' }
+      }
+    }
+  });
+}
+
+// رسم أولي عند فتح الصفحة
+drawChart();
+</script>
+
+</body>
+</html>
