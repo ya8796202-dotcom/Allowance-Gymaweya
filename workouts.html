@@ -228,3 +228,36 @@ function displayPlan(){
 
 displayPlan();
 </script>
+
+
+
+<!-- مؤقت للراحة -->
+<div class="timer">
+  <p>⏱️ وقت الراحة: <span id="time">60</span> ثانية</p>
+  <button onclick="startTimer()">ابدأ المؤقت</button>
+</div>
+
+<!-- ملاحظات شخصية -->
+<div class="notes">
+  <label>📝 ملاحظاتك:</label>
+  <textarea id="exerciseNotes"></textarea>
+  <button onclick="saveNotes()">💾 حفظ الملاحظات</button>
+</div>
+
+<script>
+function startTimer(){
+  let time = 60;
+  const span = document.getElementById("time");
+  const interval = setInterval(()=>{
+    time--;
+    span.textContent = time;
+    if(time <= 0) clearInterval(interval);
+  },1000);
+}
+
+function saveNotes(){
+  const notes = document.getElementById("exerciseNotes").value;
+  localStorage.setItem("exerciseNotes", notes);
+  alert("✅ تم حفظ الملاحظات!");
+}
+</script>
