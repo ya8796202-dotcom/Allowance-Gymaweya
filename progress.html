@@ -2,120 +2,144 @@
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
-  <title>📊 متابعة التقدم</title>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <title>📊 لوحة المتابعة</title>
+  <link rel="stylesheet" href="progress.css">
   <style>
-    .card {background:#fff; padding:15px; border-radius:10px; margin:10px;}
-    canvas {max-width: 600px; margin: auto;}
+    body {
+      margin: 0;
+      font-family: "Cairo", sans-serif;
+      background: linear-gradient(135deg, #0f172a, #1e293b);
+      color: #f1f5f9;
+      display: flex;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      width: 220px;
+      background: #1e293b;
+      height: 100vh;
+      padding: 20px;
+      box-shadow: 2px 0 10px rgba(0,0,0,0.5);
+      position: fixed;
+    }
+    .sidebar h2 {
+      color: #38bdf8;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+    .sidebar a {
+      display: block;
+      padding: 12px;
+      margin: 8px 0;
+      color: #f1f5f9;
+      text-decoration: none;
+      border-radius: 8px;
+      transition: 0.3s;
+    }
+    .sidebar a:hover {
+      background: #0ea5e9;
+      color: #fff;
+    }
+
+    /* Main content */
+    .main {
+      margin-right: 240px;
+      padding: 20px;
+      flex: 1;
+    }
+
+    .card {
+      background: #1e293b;
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.6);
+    }
+    .card h2 {
+      color: #38bdf8;
+      margin-bottom: 15px;
+      border-bottom: 2px solid #38bdf8;
+      padding-bottom: 5px;
+    }
+
+    /* Progress bar */
+    .progress-container {
+      background: #334155;
+      border-radius: 10px;
+      overflow: hidden;
+      height: 30px;
+    }
+    .progress-bar {
+      background: linear-gradient(90deg, #06b6d4, #3b82f6);
+      height: 100%;
+      width: 70%; /* نسبة ثابتة كمثال */
+      text-align: center;
+      color: #fff;
+      line-height: 30px;
+      font-weight: bold;
+      transition: width 0.6s ease-in-out;
+    }
   </style>
 </head>
 <body>
 
-<header>
-  <h1>📊 متابعة التقدم</h1>
-  <nav>
-    <a href="index.html">الرئيسية</a>
-    <a href="workout.html">التمارين</a>
-    <a href="progress.html" class="active">التقدم</a>
-  </nav>
-</header>
+<!-- Sidebar -->
+<div class="sidebar">
+  <h2>🏋️‍♂️ القائمة</h2>
+  <a href="workout.html">💪 التمارين</a>
+  <a href="nutrition.html">🥗 التغذية</a>
+  <a href="progress.html" class="active">📊 التقدم</a>
+</div>
 
-<section class="card">
-  <h2>📈 عدد التكرارات المنجزة</h2>
-  <canvas id="repsChart"></canvas>
-</section>
+<!-- Main content -->
+<div class="main">
+  <div class="card">
+    <h2>✅ نسبة الإنجاز الأسبوعي</h2>
+    <div class="progress-container">
+      <div class="progress-bar">70%</div>
+    </div>
+  </div>
 
-<section class="card">
-  <h2>⚖️ تتبع الوزن</h2>
-  <form id="weightForm">
-    <label>أدخل وزنك (كجم):</label>
-    <input type="number" id="weightInput" required>
-    <button type="submit">💾 حفظ</button>
-  </form>
-  <canvas id="weightChart"></canvas>
-</section>
+  <div class="card">
+    <h2>⚖️ تتبع الوزن</h2>
+    <canvas id="weightChart"></canvas>
+  </div>
 
+  <div class="card">
+    <h2>📈 عدد التكرارات</h2>
+    <canvas id="repsChart"></canvas>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-// بيانات التكرارات (مثال تجريبي)
-let repsData = JSON.parse(localStorage.getItem("repsData")) || [10, 15, 20, 25, 30, 35, 40];
+// مثال بيانات للرسوم البيانية
+new Chart(document.getElementById("weightChart"), {
+  type: 'bar',
+  data: {
+    labels: ["أسبوع 1","أسبوع 2","أسبوع 3"],
+    datasets: [{
+      label: "الوزن (كجم)",
+      data: [70, 72, 73],
+      backgroundColor: "#22c55e"
+    }]
+  }
+});
 
-// رسم بياني للتكرارات
 new Chart(document.getElementById("repsChart"), {
   type: 'line',
   data: {
     labels: ["السبت","الأحد","الاثنين","الثلاثاء","الأربعاء","الخميس","الجمعة"],
     datasets: [{
       label: "عدد التكرارات",
-      data: repsData,
+      data: [10, 15, 20, 25, 30, 35, 40],
       borderColor: "#0ea5e9",
       backgroundColor: "rgba(14,165,233,0.3)",
       fill: true
     }]
   }
 });
-
-// بيانات الوزن
-let weightData = JSON.parse(localStorage.getItem("weightData")) || [];
-let weeks = weightData.map((_,i)=>"أسبوع "+(i+1));
-
-// رسم بياني للوزن
-let weightChart = new Chart(document.getElementById("weightChart"), {
-  type: 'bar',
-  data: {
-    labels: weeks,
-    datasets: [{
-      label: "الوزن (كجم)",
-      data: weightData,
-      backgroundColor: "#22c55e"
-    }]
-  }
-});
-
-// حفظ الوزن الجديد
-document.getElementById("weightForm").addEventListener("submit", function(e){
-  e.preventDefault();
-  let w = document.getElementById("weightInput").value;
-  weightData.push(w);
-  localStorage.setItem("weightData", JSON.stringify(weightData));
-  location.reload();
-});
 </script>
 
 </body>
 </html>
-
-
-<section class="card">
-  <h2>✅ نسبة الإنجاز الأسبوعي</h2>
-  <div style="background:#eee; border-radius:10px; overflow:hidden; height:30px;">
-    <div id="progressBar" style="background:#0ea5e9; height:100%; width:0%; text-align:center; color:#fff; line-height:30px;">
-      0%
-    </div>
-  </div>
-</section>
-
-<script>
-// مثال: عدد التمارين الكلي في الأسبوع
-const totalExercises = 18; // 6 أيام × 3 تمارين (Push Pull Legs)
-let completedExercises = JSON.parse(localStorage.getItem("completedExercises")) || 0;
-
-// تحديث شريط التقدم
-function updateProgress(){
-  let percent = Math.round((completedExercises / totalExercises) * 100);
-  const bar = document.getElementById("progressBar");
-  bar.style.width = percent + "%";
-  bar.textContent = percent + "%";
-}
-
-// دالة لزيادة عدد التمارين المنجزة (تستدعى من صفحة التمارين)
-function addCompletedExercise(){
-  completedExercises++;
-  localStorage.setItem("completedExercises", completedExercises);
-  updateProgress();
-}
-
-// عرض أولي
-updateProgress();
-</script>
-
-
