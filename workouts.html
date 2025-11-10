@@ -39,3 +39,192 @@
 
 </body>
 </html>
+
+
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>💪 جدول التمارين الأسبوعي للتضخيم</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .card {
+      background: #fff;
+      padding: 15px;
+      border-radius: 10px;
+      margin: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill,minmax(300px,1fr));
+      gap: 15px;
+    }
+    .exercise-video {
+      width: 100%;
+      height: 200px;
+      border-radius: 8px;
+      margin-top: 10px;
+    }
+    .counter {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 10px;
+    }
+    .counter button {
+      padding: 5px 10px;
+      border: none;
+      border-radius: 5px;
+      background: #0ea5e9;
+      color: #fff;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>💪 جدول التمارين الأسبوعي للتضخيم</h1>
+  <nav>
+    <a href="index.html">الرئيسية</a>
+    <a href="workout.html" class="active">التمارين</a>
+  </nav>
+</header>
+
+<section class="grid" id="weeklyPlan"></section>
+
+<script>
+// جدول أسبوعي للتضخيم (Push Pull Legs + راحة)
+const weeklyPlan = [
+  {day:"السبت", type:"Push (صدر + كتف + تراي)", exercises:[
+    {name:"ضغط بنش بار", sets:4, reps:10, video:"https://www.youtube.com/embed/gRVjAtPip0Y"},
+    {name:"ضغط كتف دمبل", sets:3, reps:12, video:"https://www.youtube.com/embed/B-aVuyhvLHU"},
+    {name:"تراي خلف الرأس", sets:3, reps:12, video:"https://www.youtube.com/embed/vB5OHsJ3EME"}
+  ]},
+  {day:"الأحد", type:"Pull (ظهر + باي)", exercises:[
+    {name:"سحب بار أمامي", sets:4, reps:10, video:"https://www.youtube.com/embed/CAwf7n6Luuc"},
+    {name:"بار باي", sets:3, reps:12, video:"https://www.youtube.com/embed/ykJmrZ5v0Oo"},
+    {name:"دمبل باي", sets:3, reps:12, video:"https://www.youtube.com/embed/in7PaeYlhrM"}
+  ]},
+  {day:"الاثنين", type:"Legs (رجلين)", exercises:[
+    {name:"سكوات بار", sets:4, reps:10, video:"https://www.youtube.com/embed/aclHkVaku9U"},
+    {name:"لانجز دمبل", sets:3, reps:12, video:"https://www.youtube.com/embed/D7KaRcUTQeE"},
+    {name:"رفع سمانة", sets:3, reps:15, video:"https://www.youtube.com/embed/YMmgqO8Jo-k"}
+  ]},
+  {day:"الثلاثاء", type:"راحة", exercises:[]},
+  {day:"الأربعاء", type:"Push", exercises:[
+    {name:"ضغط دمبل مائل", sets:4, reps:10, video:"https://www.youtube.com/embed/8iPEnn-ltC8"},
+    {name:"رفرفة جانبية", sets:3, reps:12, video:"https://www.youtube.com/embed/3VcKaXpzqRo"},
+    {name:"تراي كيبل", sets:3, reps:12, video:"https://www.youtube.com/embed/2-LAMcpzODU"}
+  ]},
+  {day:"الخميس", type:"Pull", exercises:[
+    {name:"سحب دمبل", sets:4, reps:10, video:"https://www.youtube.com/embed/pYcpY20QaE8"},
+    {name:"باي كيبل", sets:3, reps:12, video:"https://www.youtube.com/embed/av7v2QXhTmk"},
+    {name:"سحب بار ضيق", sets:3, reps:12, video:"https://www.youtube.com/embed/6kALZikXxLc"}
+  ]},
+  {day:"الجمعة", type:"Legs", exercises:[
+    {name:"سكوات دمبل", sets:4, reps:10, video:"https://www.youtube.com/embed/UXJrBgI2RxA"},
+    {name:"رفع رجلين", sets:3, reps:12, video:"https://www.youtube.com/embed/2C-uNgKwPLE"},
+    {name:"لانجز بار", sets:3, reps:12, video:"https://www.youtube.com/embed/Z2n58m2i4jg"}
+  ]}
+];
+
+// عرض الجدول
+function displayPlan(){
+  const container = document.getElementById("weeklyPlan");
+  container.innerHTML = "";
+  weeklyPlan.forEach(dayPlan => {
+    const card = document.createElement("div");
+    card.className = "card";
+    card.innerHTML = `<h2>${dayPlan.day} - ${dayPlan.type}</h2>`;
+    if(dayPlan.exercises.length === 0){
+      card.innerHTML += "<p>راحة اليوم ✅</p>";
+    } else {
+      dayPlan.exercises.forEach((ex, i) => {
+        card.innerHTML += `
+          <h3>${ex.name}</h3>
+          <p>المجموعات: ${ex.sets} | التكرارات: ${ex.reps}</p>
+          <div class="counter">
+            <button onclick="decreaseCount('${dayPlan.day}',${i})">➖</button>
+            <span id="${dayPlan.day}-${i}">0</span>
+            <button onclick="increaseCount('${dayPlan.day}',${i})">➕</button>
+          </div>
+          <iframe class="exercise-video" src="${ex.video}" frameborder="0" allowfullscreen></iframe>
+        `;
+      });
+    }
+    container.appendChild(card);
+  });
+}
+
+// عداد التكرارات
+function increaseCount(day,index){
+  const span = document.getElementById(`${day}-${index}`);
+  span.textContent = parseInt(span.textContent)+1;
+}
+function decreaseCount(day,index){
+  const span = document.getElementById(`${day}-${index}`);
+  if(parseInt(span.textContent)>0){
+    span.textContent = parseInt(span.textContent)-1;
+  }
+}
+
+displayPlan();
+</script>
+
+</body>
+</html>
+<script>
+// حفظ التكرارات في localStorage
+function increaseCount(day,index){
+  const key = `${day}-${index}`;
+  let count = parseInt(localStorage.getItem(key)) || 0;
+  count++;
+  localStorage.setItem(key, count);
+  document.getElementById(key).textContent = count;
+}
+
+function decreaseCount(day,index){
+  const key = `${day}-${index}`;
+  let count = parseInt(localStorage.getItem(key)) || 0;
+  if(count > 0){
+    count--;
+    localStorage.setItem(key, count);
+    document.getElementById(key).textContent = count;
+  }
+}
+
+// عرض الجدول مع تحميل القيم المخزنة
+function displayPlan(){
+  const container = document.getElementById("weeklyPlan");
+  container.innerHTML = "";
+  weeklyPlan.forEach(dayPlan => {
+    const card = document.createElement("div");
+    card.className = "card";
+    card.innerHTML = `<h2>${dayPlan.day} - ${dayPlan.type}</h2>`;
+    if(dayPlan.exercises.length === 0){
+      card.innerHTML += "<p>راحة اليوم ✅</p>";
+    } else {
+      dayPlan.exercises.forEach((ex, i) => {
+        const key = `${dayPlan.day}-${i}`;
+        const savedCount = localStorage.getItem(key) || 0;
+        card.innerHTML += `
+          <h3>${ex.name}</h3>
+          <p>المجموعات: ${ex.sets} | التكرارات: ${ex.reps}</p>
+          <div class="counter">
+            <button onclick="decreaseCount('${dayPlan.day}',${i})">➖</button>
+            <span id="${key}">${savedCount}</span>
+            <button onclick="increaseCount('${dayPlan.day}',${i})">➕</button>
+          </div>
+          <iframe class="exercise-video" src="${ex.video}" frameborder="0" allowfullscreen></iframe>
+        `;
+      });
+    }
+    container.appendChild(card);
+  });
+}
+
+displayPlan();
+</script>
