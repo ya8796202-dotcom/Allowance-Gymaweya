@@ -4,6 +4,27 @@
   <meta charset="UTF-8">
   <title>🍽️ وصفات صحية</title>
   <link rel="stylesheet" href="style.css">
+  <style>
+    .recipe-img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      border-radius: 8px;
+      margin-bottom: 10px;
+    }
+    .card {
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px;
+      background: #fff;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 15px;
+    }
+  </style>
 </head>
 <body>
 
@@ -11,31 +32,134 @@
   <h1>🍽️ وصفات صحية</h1>
   <nav>
     <a href="index.html">الرئيسية</a>
-    <a href="workout.html">التمارين</a>
-    <a href="nutrition.html">التغذية</a>
     <a href="recipes.html" class="active">الوصفات</a>
   </nav>
 </header>
 
-<section class="grid">
-  <div class="card">
-    <h3>شوفان بالبروتين</h3>
-    <p>شوفان + لبن + بروتين + فواكه</p>
-    <p>السعرات: 350 | بروتين: 25g</p>
-  </div>
+<!-- فورم لإضافة وصفة جديدة -->
+<section class="card">
+  <h2>➕ أضف وصفة جديدة</h2>
+  <form id="recipeForm">
+    <label>اسم الوصفة:</label>
+    <input type="text" id="recipeName" required>
 
-  <div class="card">
-    <h3>سلطة التونة</h3>
-    <p>تونة + خضار + زيت زيتون</p>
-    <p>السعرات: 280 | بروتين: 30g</p>
-  </div>
+    <label>المكونات:</label>
+    <textarea id="ingredients" required></textarea>
 
-  <div class="card">
-    <h3>صدر دجاج مشوي</h3>
-    <p>دجاج + بهارات + خضار</p>
-    <p>السعرات: 400 | بروتين: 35g</p>
-  </div>
+    <label>السعرات:</label>
+    <input type="number" id="calories" required>
+
+    <label>البروتين (g):</label>
+    <input type="number" id="protein" required>
+
+    <label>نوع الوجبة:</label>
+    <select id="mealType" required>
+      <option value="فطار">فطار</option>
+      <option value="غداء">غداء</option>
+      <option value="عشاء">عشاء</option>
+    </select>
+
+    <label>رابط الصورة:</label>
+    <input type="text" id="imgUrl" placeholder="مثال: images/oats.jpg">
+
+    <button type="submit" class="btn primary">💾 حفظ الوصفة</button>
+  </form>
 </section>
+
+<!-- أدوات الفلترة -->
+<section class="card">
+  <h2>🔍 فلترة الوصفات</h2>
+  <label>ابحث باسم الوصفة:</label>
+  <input type="text" id="searchInput" placeholder="مثال: شوفان">
+
+  <label>نوع الوجبة:</label>
+  <select id="filterMealType">
+    <option value="">الكل</option>
+    <option value="فطار">فطار</option>
+    <option value="غداء">غداء</option>
+    <option value="عشاء">عشاء</option>
+  </select>
+
+  <label>أقصى سعرات:</label>
+  <input type="number" id="maxCalories" placeholder="مثال: 400">
+
+  <label>أدنى بروتين (g):</label>
+  <input type="number" id="minProtein" placeholder="مثال: 20">
+
+  <button onclick="filterRecipes()" class="btn primary">تطبيق الفلترة</button>
+</section>
+
+<!-- عرض الوصفات -->
+<section class="grid" id="recipesList"></section>
+
+<script>
+// جلب الوصفات من التخزين أو إنشاء جديدة
+let recipes = JSON.parse(localStorage.getItem("recipes")) || [];
+
+// عرض الوصفات
+function displayRecipes(list){
+  const container = document.getElementById("recipesList");
+  container.innerHTML = "";
+  list.forEach((r, i) => {
+    const card = document.createElement("div");
+    card.className = "card";
+    card.innerHTML = `
+      <img src="${r.img}" alt="${r.name}" class="recipe-img">
+      <h3>${r.name} (${r.type})</h3>
+      <p>${r.ingredients}</p>
+      <p>السعرات: ${r.calories} | بروتين: ${r.protein}g</p>
+      <button onclick="deleteRecipe(${i})" class="btn danger">🗑️ حذف</button>
+    `;
+    container.appendChild(card);
+  });
+}
+
+// إضافة وصفة جديدة
+document.getElementById("recipeForm").addEventListener("submit", function(e){
+  e.preventDefault();
+  const name = document.getElementById("recipeName").value;
+  const ingredients = document.getElementById("ingredients").value;
+  const calories = document.getElementById("calories").value;
+  const protein = document.getElementById("protein").value;
+  const type = document.getElementById("mealType").value;
+  const img = document.getElementById("imgUrl").value || "images/default.jpg";
+
+  recipes.push({name, ingredients, calories, protein, type, img});
+  localStorage.setItem("recipes", JSON.stringify(recipes));
+
+  alert("✅ تم إضافة الوصفة بنجاح!");
+  displayRecipes(recipes);
+});
+
+// حذف وصفة
+function deleteRecipe(index){
+  recipes.splice(index, 1);
+  localStorage.setItem("recipes", JSON.stringify(recipes));
+  displayRecipes(recipes);
+}
+
+// فلترة الوصفات
+function filterRecipes(){
+  const search = document.getElementById("searchInput").value.toLowerCase();
+  const mealType = document.getElementById("filterMealType").value;
+  const maxCalories = document.getElementById("maxCalories").value;
+  const minProtein = document.getElementById("minProtein").value;
+
+  let filtered = recipes.filter(r => {
+    return (
+      (search === "" || r.name.toLowerCase().includes(search)) &&
+      (mealType === "" || r.type === mealType) &&
+      (maxCalories === "" || r.calories <= maxCalories) &&
+      (minProtein === "" || r.protein >= minProtein)
+    );
+  });
+
+  displayRecipes(filtered);
+}
+
+// عرض أولي
+displayRecipes(recipes);
+</script>
 
 </body>
 </html>
