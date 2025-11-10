@@ -2,59 +2,40 @@
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
-  <title>📊 لوحة المتابعة</title>
+  <title>📊 لوحة التقدم</title>
   <link rel="stylesheet" href="progress.css">
   <style>
     body {
-      margin: 0;
       font-family: "Cairo", sans-serif;
-      background: linear-gradient(135deg, #0f172a, #1e293b);
+      background: #0f172a;
       color: #f1f5f9;
-      display: flex;
+      margin: 0;
+      padding: 0;
     }
 
-    /* Sidebar */
-    .sidebar {
-      width: 220px;
-      background: #1e293b;
-      height: 100vh;
-      padding: 20px;
-      box-shadow: 2px 0 10px rgba(0,0,0,0.5);
-      position: fixed;
-    }
-    .sidebar h2 {
-      color: #38bdf8;
-      margin-bottom: 20px;
-      text-align: center;
-    }
-    .sidebar a {
-      display: block;
-      padding: 12px;
-      margin: 8px 0;
-      color: #f1f5f9;
-      text-decoration: none;
-      border-radius: 8px;
-      transition: 0.3s;
-    }
-    .sidebar a:hover {
+    header {
       background: #0ea5e9;
+      padding: 20px;
+      text-align: center;
+      font-size: 22px;
+      font-weight: bold;
       color: #fff;
     }
 
-    /* Main content */
-    .main {
-      margin-right: 240px;
+    .container {
+      display: grid;
+      grid-template-columns: 1fr 1fr; /* عمودين */
+      gap: 20px;
       padding: 20px;
-      flex: 1;
     }
 
     .card {
       background: #1e293b;
       border-radius: 12px;
       padding: 20px;
-      margin-bottom: 20px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.6);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.6);
     }
+
     .card h2 {
       color: #38bdf8;
       margin-bottom: 15px;
@@ -62,13 +43,13 @@
       padding-bottom: 5px;
     }
 
-    /* Progress bar */
     .progress-container {
       background: #334155;
       border-radius: 10px;
       overflow: hidden;
       height: 30px;
     }
+
     .progress-bar {
       background: linear-gradient(90deg, #06b6d4, #3b82f6);
       height: 100%;
@@ -77,22 +58,37 @@
       color: #fff;
       line-height: 30px;
       font-weight: bold;
-      transition: width 0.6s ease-in-out;
+    }
+
+    textarea {
+      width: 100%;
+      height: 80px;
+      border-radius: 8px;
+      border: none;
+      padding: 10px;
+      background: #0f172a;
+      color: #f1f5f9;
+      margin-top: 10px;
+    }
+
+    button {
+      margin-top: 10px;
+      padding: 10px;
+      border-radius: 8px;
+      border: none;
+      background: #38bdf8;
+      color: #0f172a;
+      font-weight: bold;
+      cursor: pointer;
     }
   </style>
 </head>
 <body>
 
-<!-- Sidebar -->
-<div class="sidebar">
-  <h2>🏋️‍♂️ القائمة</h2>
-  <a href="workout.html">💪 التمارين</a>
-  <a href="nutrition.html">🥗 التغذية</a>
-  <a href="progress.html" class="active">📊 التقدم</a>
-</div>
+<header>📊 لوحة التقدم</header>
 
-<!-- Main content -->
-<div class="main">
+<div class="container">
+  <!-- شريط التقدم -->
   <div class="card">
     <h2>✅ نسبة الإنجاز الأسبوعي</h2>
     <div class="progress-container">
@@ -100,180 +96,56 @@
     </div>
   </div>
 
+  <!-- التقويم التدريبي -->
   <div class="card">
-    <h2>⚖️ تتبع الوزن</h2>
-    <canvas id="weightChart"></canvas>
+    <h2>📅 التقويم التدريبي</h2>
+    <table style="width:100%; text-align:center; border-collapse:collapse;">
+      <tr><th>اليوم</th><th>الحالة</th></tr>
+      <tr><td>السبت</td><td>✅</td></tr>
+      <tr><td>الأحد</td><td>❌</td></tr>
+      <tr><td>الاثنين</td><td>✅</td></tr>
+      <tr><td>الثلاثاء</td><td>❌</td></tr>
+      <tr><td>الأربعاء</td><td>✅</td></tr>
+      <tr><td>الخميس</td><td>❌</td></tr>
+      <tr><td>الجمعة</td><td>✅</td></tr>
+    </table>
   </div>
 
+  <!-- الرسوم البيانية -->
   <div class="card">
-    <h2>📈 عدد التكرارات</h2>
-    <canvas id="repsChart"></canvas>
+    <h2>📈 مقارنة بين الأسابيع</h2>
+    <canvas id="compareChart"></canvas>
+  </div>
+
+  <!-- الملاحظات -->
+  <div class="card">
+    <h2>📝 ملاحظاتك</h2>
+    <textarea id="notes" placeholder="اكتب ملاحظاتك هنا..."></textarea>
+    <button onclick="saveNotes()">💾 حفظ</button>
   </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-// مثال بيانات للرسوم البيانية
-new Chart(document.getElementById("weightChart"), {
+function saveNotes(){
+  let notes = document.getElementById("notes").value;
+  localStorage.setItem("userNotes", notes);
+  alert("✅ تم حفظ الملاحظات!");
+}
+document.getElementById("notes").value = localStorage.getItem("userNotes") || "";
+
+// رسم بياني للمقارنة
+new Chart(document.getElementById("compareChart"), {
   type: 'bar',
   data: {
-    labels: ["أسبوع 1","أسبوع 2","أسبوع 3"],
-    datasets: [{
-      label: "الوزن (كجم)",
-      data: [70, 72, 73],
-      backgroundColor: "#22c55e"
-    }]
-  }
-});
-
-new Chart(document.getElementById("repsChart"), {
-  type: 'line',
-  data: {
     labels: ["السبت","الأحد","الاثنين","الثلاثاء","الأربعاء","الخميس","الجمعة"],
-    datasets: [{
-      label: "عدد التكرارات",
-      data: [10, 15, 20, 25, 30, 35, 40],
-      borderColor: "#0ea5e9",
-      backgroundColor: "rgba(14,165,233,0.3)",
-      fill: true
-    }]
+    datasets: [
+      { label: "الأسبوع الحالي", data: [12,18,22,28,30,35,40], backgroundColor: "#0ea5e9" },
+      { label: "الأسبوع السابق", data: [10,15,20,25,28,30,38], backgroundColor: "#22c55e" }
+    ]
   }
 });
 </script>
 
 </body>
 </html>
-
-
-<div class="card">
-  <h2>🏆 إنجازاتك</h2>
-  <ul id="achievements"></ul>
-</div>
-
-<div class="card">
-  <h2>📝 ملاحظاتك</h2>
-  <textarea id="notes" placeholder="اكتب ملاحظاتك هنا..."></textarea>
-  <button onclick="saveNotes()">💾 حفظ الملاحظات</button>
-</div>
-
-<script>
-// إنجازات بناءً على عدد التمارين المنجزة
-let completedExercises = parseInt(localStorage.getItem("completedExercises")) || 0;
-let achievementsList = document.getElementById("achievements");
-
-if(completedExercises >= 50){
-  achievementsList.innerHTML += "<li>🎉 أنجزت 50 تمرين!</li>";
-}
-if(completedExercises >= 100){
-  achievementsList.innerHTML += "<li>🔥 وصلت لـ 100 تمرين!</li>";
-}
-
-// حفظ الملاحظات
-function saveNotes(){
-  let notes = document.getElementById("notes").value;
-  localStorage.setItem("userNotes", notes);
-  alert("✅ تم حفظ الملاحظات!");
-}
-
-// تحميل الملاحظات عند فتح الصفحة
-document.getElementById("notes").value = localStorage.getItem("userNotes") || "";
-</script>
-
-
-<div class="card">
-  <h2>📅 التقويم التدريبي</h2>
-  <table style="width:100%; text-align:center; border-collapse:collapse;">
-    <tr>
-      <th>اليوم</th>
-      <th>الحالة</th>
-    </tr>
-    <tr><td>السبت</td><td id="sat">❌</td></tr>
-    <tr><td>الأحد</td><td id="sun">❌</td></tr>
-    <tr><td>الاثنين</td><td id="mon">❌</td></tr>
-    <tr><td>الثلاثاء</td><td id="tue">❌</td></tr>
-    <tr><td>الأربعاء</td><td id="wed">❌</td></tr>
-    <tr><td>الخميس</td><td id="thu">❌</td></tr>
-    <tr><td>الجمعة</td><td id="fri">❌</td></tr>
-  </table>
-</div>
-
-<script>
-// مثال: تحديث حالة يوم الأحد
-localStorage.setItem("sun", "✅"); // حفظ إن التمرين اتعمل يوم الأحد
-
-// تحميل الحالات من localStorage
-["sat","sun","mon","tue","wed","thu","fri"].forEach(day=>{
-  let status = localStorage.getItem(day) || "❌";
-  document.getElementById(day).textContent = status;
-});
-</script>
-
-
-<div class="card">
-  <h2>📈 مقارنة بين الأسبوع الحالي والسابق</h2>
-  <canvas id="compareChart"></canvas>
-</div>
-
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script>
-// بيانات تجريبية: عدد التكرارات لكل يوم في الأسبوع الحالي والسابق
-let currentWeek = [12, 18, 22, 28, 30, 35, 40];
-let lastWeek    = [10, 15, 20, 25, 28, 30, 38];
-
-new Chart(document.getElementById("compareChart"), {
-  type: 'bar',
-  data: {
-    labels: ["السبت","الأحد","الاثنين","الثلاثاء","الأربعاء","الخميس","الجمعة"],
-    datasets: [
-      {
-        label: "الأسبوع الحالي",
-        data: currentWeek,
-        backgroundColor: "#0ea5e9"
-      },
-      {
-        label: "الأسبوع السابق",
-        data: lastWeek,
-        backgroundColor: "#22c55e"
-      }
-    ]
-  },
-  options: {
-    responsive: true,
-    plugins: {
-      legend: { labels: { color: "#f1f5f9" } }
-    },
-    scales: {
-      x: { ticks: { color: "#f1f5f9" } },
-      y: { ticks: { color: "#f1f5f9" } }
-    }
-  }
-});
-</script>
-
-
-<div class="card">
-  <h2>🏆 رسائل تحفيزية</h2>
-  <p id="motivation">استمر في التمرين 💪</p>
-</div>
-
-<script>
-// بيانات تجريبية للأسبوع الحالي والسابق
-let currentWeek = [12, 18, 22, 28, 30, 35, 40];
-let lastWeek    = [10, 15, 20, 25, 28, 30, 38];
-
-// حساب مجموع التكرارات لكل أسبوع
-let sumCurrent = currentWeek.reduce((a,b)=>a+b,0);
-let sumLast    = lastWeek.reduce((a,b)=>a+b,0);
-
-// عنصر الرسالة
-let motivation = document.getElementById("motivation");
-
-// مقارنة وإظهار رسالة تحفيزية
-if(sumCurrent > sumLast){
-  motivation.textContent = "🔥 ممتاز! الأسبوع الحالي أفضل من السابق، استمر على نفس المستوى!";
-} else if(sumCurrent === sumLast){
-  motivation.textContent = "⚖️ أداءك ثابت، حاول تزود شوية الأسبوع الجاي!";
-} else {
-  motivation.textContent = "💡 الأسبوع السابق كان أقوى، شد حيلك المرة دي!";
-}
-</script>
