@@ -268,3 +268,50 @@ table tr:nth-child(5) { animation-delay: 1.4s; }
     transform: translateX(0);
   }
 }
+
+
+
+
+/* خلفية متدرجة للقسم */
+body {
+  background: linear-gradient(135deg, #0ea5e9, #22c55e, #f97316);
+  background-size: 400% 400%;
+  animation: gradientBG 15s ease infinite;
+  font-family: "Tajawal", sans-serif;
+}
+
+/* حركة الخلفية */
+@keyframes gradientBG {
+  0% {background-position: 0% 50%;}
+  50% {background-position: 100% 50%;}
+  100% {background-position: 0% 50%;}
+}
+
+/* تصميم الكروت */
+.card {
+  background: rgba(255,255,255,0.9);
+  border-radius: 12px;
+  padding: 15px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* أنيميشن عند المرور */
+.card:hover {
+  transform: translateY(-8px) scale(1.03);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+}
+
+/* صور الوصفات */
+.recipe-img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  transition: transform 0.3s ease;
+}
+
+.recipe-img:hover {
+  transform: scale(1.05);
+}
