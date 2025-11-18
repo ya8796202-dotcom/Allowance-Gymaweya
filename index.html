@@ -4,6 +4,78 @@
   <meta charset="UTF-8">
   <title>🏋️‍♂️ موقع اللياقة</title>
   <link rel="stylesheet" href="style.css">
+
+  <!-- تحميل مكتبة YouTube IFrame API مرة واحدة -->
+  <script>
+    (function loadYT(){
+      var tag = document.createElement('script');
+      tag.src = "https://www.youtube.com/iframe_api";
+      document.head.appendChild(tag);
+    })();
+  </script>
+
+  <!-- ستايل بسيط للهيرو (تقدر تحفظه في style.css لو حابب) -->
+  <style>
+    .hero {
+      position: relative;
+      padding: 0;
+      margin: 0 0 24px;
+      border-radius: 16px;
+      overflow: hidden;
+      background: #000;
+    }
+    .hero-inner {
+      position: relative;
+      aspect-ratio: 16/9;
+      width: 100%;
+      max-height: 70vh;
+      background: #000;
+    }
+    .hero-content {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      padding: 16px;
+      background: linear-gradient(180deg, rgba(0,0,0,0.0) 30%, rgba(0,0,0,0.45) 100%);
+      color: #fff;
+    }
+    .hero-title {
+      font-size: clamp(20px, 4vw, 32px);
+      font-weight: 800;
+      margin: 0;
+      letter-spacing: 0.3px;
+    }
+    .hero-sub {
+      font-size: clamp(14px, 2.6vw, 18px);
+      opacity: 0.9;
+      margin: 6px 0 0;
+    }
+    .hero-actions {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+    .btn {
+      display: inline-block;
+      padding: 10px 14px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .btn.primary { background: #00d084; color: #000; }
+    .btn.ghost { background: rgba(255,255,255,0.15); color: #fff; border: 1px solid rgba(255,255,255,0.3); }
+
+    #unmute {
+      border: none;
+      box-shadow: 0 6px 16px rgba(0,0,0,0.25);
+    }
+
+    header, footer, .grid { padding: 0 16px; }
+    header { margin-bottom: 12px; }
+  </style>
 </head>
 <body>
 
@@ -22,6 +94,25 @@
     <a href="register.html">إنشاء حساب</a>
   </nav>
 </header>
+
+<!-- هيرو الفيديو: يظهر أعلى الصفحة -->
+<section class="hero" aria-label="فيديو تعريفي">
+  <div class="hero-inner">
+    <div id="player" title="Intro video"></div>
+
+    <!-- طبقة محتوى فوق الفيديو -->
+    <div class="hero-content">
+      <div>
+        <h2 class="hero-title">ابدأ رحلتك الرياضية بثقة</h2>
+        <p class="hero-sub">فيديو تعريفي سريع يحمسك ويعرّفك على منصتنا.</p>
+      </div>
+      <div class="hero-actions">
+        <a href="workouts.html" class="btn primary">ابدأ التمارين</a>
+        <button id="unmute" class="btn ghost">تشغيل بالصوت</button>
+      </div>
+    </div>
+  </div>
+</section>
 
 <section class="grid">
   <div class="card">
@@ -82,6 +173,44 @@
 <footer>
   <p>© 2025 موقع اللياقة - ياسر أحمد حمدي</p>
 </footer>
+
+<!-- سكربت التهيئة: إنشاء المشغل والتحكم بالصوت -->
+<script>
+  var player;
+  // تُستدعى تلقائيًا بواسطة مكتبة يوتيوب
+  function onYouTubeIframeAPIReady() {
+    player = new YT.Player('player', {
+      videoId: 'A5Hd8BARLC8', // ID الفيديو من رابط الشورتس
+      playerVars: {
+        autoplay: 1,        // تشغيل تلقائي
+        controls: 0,        // إخفاء أدوات التحكم
+        modestbranding: 1,
+        rel: 0,
+        playsinline: 1,     // تشغيل داخل الصفحة بالموبايل
+        mute: 1,            // يبدأ ميوت لتجاوز قيود المتصفحات
+        loop: 1,            // تكرار
+        fs: 0
+      },
+      events: {
+        onReady: function (e) { e.target.playVideo(); }
+      }
+    });
+  }
+
+  // زر تشغيل بالصوت: أول تفاعل يفعّل الصوت
+  document.getElementById('unmute').addEventListener('click', function(){
+    try {
+      player.unMute();
+      player.setVolume(100);
+      player.playVideo();
+      this.textContent = 'الصوت مفعل';
+      this.classList.remove('ghost');
+      this.classList.add('primary');
+    } catch(err) {
+      alert('لو الصوت ما اشتغل، اضغط مرة ثانية.');
+    }
+  });
+</script>
 
 </body>
 </html>
