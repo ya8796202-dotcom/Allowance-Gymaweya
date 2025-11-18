@@ -5,7 +5,7 @@
   <title>🏋️‍♂️ موقع اللياقة</title>
   <link rel="stylesheet" href="style.css">
 
-  <!-- تحميل مكتبة YouTube IFrame API مرة واحدة -->
+  <!-- تحميل مكتبة YouTube IFrame API -->
   <script>
     (function loadYT(){
       var tag = document.createElement('script');
@@ -14,70 +14,86 @@
     })();
   </script>
 
-  <!-- ستايل بسيط للهيرو (تقدر تحفظه في style.css لو حابب) -->
+  <!-- ستايل الهيرو بوضع ملء الشاشة -->
   <style>
-    .hero {
+    :root {
+      --accent: #00d084;
+    }
+    /* هيرو ملء الشاشة */
+    .hero-full {
       position: relative;
-      padding: 0;
-      margin: 0 0 24px;
-      border-radius: 16px;
+      width: 100%;
+      height: 100vh; /* يغطي كامل ارتفاع الشاشة */
       overflow: hidden;
       background: #000;
     }
-    .hero-inner {
-      position: relative;
-      aspect-ratio: 16/9;
+    /* يجعل iframe يغطي كامل المساحة */
+    .hero-full iframe,
+    .hero-full #player {
+      position: absolute;
+      top: 0; left: 0;
       width: 100%;
-      max-height: 70vh;
-      background: #000;
+      height: 100%;
     }
-    .hero-content {
+    /* طبقة محتوى فوق الفيديو */
+    .hero-overlay {
       position: absolute;
       inset: 0;
       display: flex;
-      align-items: flex-end;
-      justify-content: space-between;
-      padding: 16px;
-      background: linear-gradient(180deg, rgba(0,0,0,0.0) 30%, rgba(0,0,0,0.45) 100%);
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 24px;
       color: #fff;
+      background: linear-gradient(180deg, rgba(0,0,0,0.35) 0%, rgba(0,0,0,0.55) 100%);
     }
     .hero-title {
-      font-size: clamp(20px, 4vw, 32px);
+      font-size: clamp(26px, 5vw, 54px);
       font-weight: 800;
-      margin: 0;
+      margin: 0 0 12px;
       letter-spacing: 0.3px;
     }
     .hero-sub {
-      font-size: clamp(14px, 2.6vw, 18px);
-      opacity: 0.9;
-      margin: 6px 0 0;
-    }
-    .hero-actions {
-      display: flex;
-      gap: 8px;
-      align-items: center;
+      font-size: clamp(16px, 3vw, 22px);
+      margin-bottom: 20px;
+      opacity: 0.95;
     }
     .btn {
       display: inline-block;
-      padding: 10px 14px;
-      border-radius: 8px;
-      text-decoration: none;
+      padding: 12px 20px;
+      border-radius: 10px;
       font-weight: 700;
       cursor: pointer;
+      border: none;
     }
-    .btn.primary { background: #00d084; color: #000; }
+    .btn.primary { background: var(--accent); color: #000; }
     .btn.ghost { background: rgba(255,255,255,0.15); color: #fff; border: 1px solid rgba(255,255,255,0.3); }
 
-    #unmute {
-      border: none;
-      box-shadow: 0 6px 16px rgba(0,0,0,0.25);
-    }
-
+    /* شريط ثابت بعد الهيرو (اختياري للتوازن البصري) */
     header, footer, .grid { padding: 0 16px; }
-    header { margin-bottom: 12px; }
+    header { margin: 24px 0 12px; }
+    nav a.btn { padding: 8px 12px; border-radius: 8px; }
+
+    /* كروت الشبكة كما هي */
+    .grid { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); margin-bottom: 24px; }
+    .card { background: #fff; border-radius: 12px; padding: 16px; box-shadow: 0 6px 16px rgba(0,0,0,0.08); }
+    .btn.primary.link { text-decoration: none; }
   </style>
 </head>
 <body>
+
+<!-- هيرو فيديو ملء الشاشة في بداية الصفحة -->
+<section class="hero-full" aria-label="فيديو تعريفي">
+  <div id="player" title="Intro video"></div>
+
+  <!-- محتوى فوق الفيديو -->
+  <div class="hero-overlay">
+    <h2 class="hero-title">ابدأ رحلتك الرياضية بثقة</h2>
+    <p class="hero-sub">فيديو تعريفي سريع يحمسك ويعرّفك على منصتنا.</p>
+    <button id="unmute" class="btn primary">تشغيل بالصوت</button>
+  </div>
+</section>
 
 <header>
   <h1>الجيماويه</h1>
@@ -95,78 +111,59 @@
   </nav>
 </header>
 
-<!-- هيرو الفيديو: يظهر أعلى الصفحة -->
-<section class="hero" aria-label="فيديو تعريفي">
-  <div class="hero-inner">
-    <div id="player" title="Intro video"></div>
-
-    <!-- طبقة محتوى فوق الفيديو -->
-    <div class="hero-content">
-      <div>
-        <h2 class="hero-title">ابدأ رحلتك الرياضية بثقة</h2>
-        <p class="hero-sub">فيديو تعريفي سريع يحمسك ويعرّفك على منصتنا.</p>
-      </div>
-      <div class="hero-actions">
-        <a href="workouts.html" class="btn primary">ابدأ التمارين</a>
-        <button id="unmute" class="btn ghost">تشغيل بالصوت</button>
-      </div>
-    </div>
-  </div>
-</section>
-
 <section class="grid">
   <div class="card">
     <h2>💪 التمارين</h2>
     <p>جداول تمارين Push Pull Legs مع شرح لكل تمرين.</p>
-    <a href="workouts.html" class="btn primary">اذهب للتمارين</a>
+    <a href="workouts.html" class="btn primary link">اذهب للتمارين</a>
   </div>
 
   <div class="card">
     <h2>🍎 التغذية</h2>
     <p>خطط غذائية وحساب السعرات والبروتين.</p>
-    <a href="nutrition.html" class="btn primary">اذهب للتغذية</a>
+    <a href="nutrition.html" class="btn primary link">اذهب للتغذية</a>
   </div>
 
   <div class="card">
     <h2>🛌 الراحة</h2>
     <p>نصائح النوم والاستشفاء لزيادة الأداء.</p>
-    <a href="recovery.html" class="btn primary">اذهب للراحة</a>
+    <a href="recovery.html" class="btn primary link">اذهب للراحة</a>
   </div>
 
   <div class="card">
     <h2>📈 المتابعة</h2>
     <p>سجل تقدمك واحفظ بياناتك.</p>
-    <a href="progress.html" class="btn primary">اذهب للمتابعة</a>
+    <a href="progress.html" class="btn primary link">اذهب للمتابعة</a>
   </div>
 
   <div class="card">
     <h2>📊 الإحصائيات</h2>
     <p>شاهد تقدمك في الوزن والسعرات عبر رسوم بيانية.</p>
-    <a href="stats.html" class="btn primary">اذهب للإحصائيات</a>
+    <a href="stats.html" class="btn primary link">اذهب للإحصائيات</a>
   </div>
 
   <div class="card">
     <h2>🍽️ الوصفات الصحية</h2>
     <p>وصفات سهلة وصحية مع حساب السعرات والبروتين.</p>
-    <a href="recipes.html" class="btn primary">اذهب للوصفات</a>
+    <a href="recipes.html" class="btn primary link">اذهب للوصفات</a>
   </div>
 
   <div class="card">
     <h2>🎥 الفيديوهات التعليمية</h2>
     <p>تعلم التمارين الصحيحة من خلال فيديوهات تعليمية.</p>
-    <a href="videos.html" class="btn primary">اذهب للفيديوهات</a>
+    <a href="videos.html" class="btn primary link">اذهب للفيديوهات</a>
   </div>
 
   <div class="card">
     <h2>🔑 تسجيل الدخول</h2>
     <p>ادخل بحسابك لمتابعة تقدمك.</p>
-    <a href="login.html" class="btn primary">تسجيل الدخول</a>
+    <a href="login.html" class="btn primary link">تسجيل الدخول</a>
   </div>
 
   <div class="card">
     <h2>📝 إنشاء حساب</h2>
     <p>سجل حساب جديد وابدأ رحلتك.</p>
-    <a href="register.html" class="btn primary">إنشاء حساب</a>
+    <a href="register.html" class="btn primary link">إنشاء حساب</a>
   </div>
 </section>
 
@@ -174,21 +171,20 @@
   <p>© 2025 موقع اللياقة - ياسر أحمد حمدي</p>
 </footer>
 
-<!-- سكربت التهيئة: إنشاء المشغل والتحكم بالصوت -->
+<!-- سكربت إنشاء المشغل والتحكم بالصوت -->
 <script>
   var player;
-  // تُستدعى تلقائيًا بواسطة مكتبة يوتيوب
   function onYouTubeIframeAPIReady() {
     player = new YT.Player('player', {
-      videoId: 'A5Hd8BARLC8', // ID الفيديو من رابط الشورتس
+      videoId: 'A5Hd8BARLC8', // معرف الفيديو من رابط الشورتس
       playerVars: {
-        autoplay: 1,        // تشغيل تلقائي
-        controls: 0,        // إخفاء أدوات التحكم
+        autoplay: 1,
+        controls: 0,
         modestbranding: 1,
         rel: 0,
-        playsinline: 1,     // تشغيل داخل الصفحة بالموبايل
-        mute: 1,            // يبدأ ميوت لتجاوز قيود المتصفحات
-        loop: 1,            // تكرار
+        playsinline: 1,
+        mute: 1,   // يبدأ مكتومًا لتجاوز قيود التشغيل التلقائي
+        loop: 1,
         fs: 0
       },
       events: {
@@ -197,15 +193,15 @@
     });
   }
 
-  // زر تشغيل بالصوت: أول تفاعل يفعّل الصوت
+  // زر تشغيل بالصوت
   document.getElementById('unmute').addEventListener('click', function(){
     try {
       player.unMute();
       player.setVolume(100);
       player.playVideo();
       this.textContent = 'الصوت مفعل';
-      this.classList.remove('ghost');
-      this.classList.add('primary');
+      this.classList.remove('primary'); // تغيير بسيط لو حابب
+      this.classList.add('ghost');
     } catch(err) {
       alert('لو الصوت ما اشتغل، اضغط مرة ثانية.');
     }
