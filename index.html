@@ -1,90 +1,68 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>💪 موقع اللياقة البدنية - PWA</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="manifest" href="/manifest.json">
+    <link rel="apple-touch-icon" href="icons/icon-192x192.png">
 
-  <title>Allowance Gymaweya</title>
+    <meta name="theme-color" content="#FF4500"/>
+    <meta name="description" content="تطبيقك المتكامل للياقة البدنية والتمارين.">
 
-  <!-- Manifest -->
-  <link rel="manifest" href="/Allowance-Gymaweya/manifest.json">
-
-  <!-- Icon -->
-  <link rel="icon" href="/Allowance-Gymaweya/icon-192.png">
-
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      background: #f5f5f5;
-      color: #333;
-    }
-    header {
-      background: #111;
-      color: white;
-      text-align: center;
-      padding: 25px;
-    }
-    .section {
-      background: white;
-      margin: 15px;
-      padding: 20px;
-      border-radius: 12px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    }
-    .btn {
-      background: #111;
-      color: white;
-      padding: 10px 20px;
-      border-radius: 8px;
-      text-decoration: none;
-      display: inline-block;
-      margin-top: 10px;
-    }
-  </style>
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js')
+                    .then(reg => console.log('Service Worker: Registered'))
+                    .catch(err => console.log(`Service Worker: Error: ${err}`));
+            });
+        }
+    </script>
 </head>
 <body>
 
-  <header>
-    <h1>Allowance Gymaweya</h1>
-    <p>خطط تدريب – تغذية – تمارين يومية</p>
-  </header>
+    <header class="header">
+        <h1>المدرب الشخصي</h1>
+    </header>
 
-  <div class="section">
-    <h2>💪 تمارين اليوم</h2>
-    <ul>
-      <li>ضغط × 15</li>
-      <li>سكوات × 20</li>
-      <li>بلانك × 1 دقيقة</li>
-    </ul>
-  </div>
+    <main class="container">
+        <section id="profile-section" class="card">
+            <h2>مرحباً بك!</h2>
+            <p>سجل الدخول أو تصفح خطط التمارين.</p>
+            <button class="btn primary">تسجيل الدخول</button>
+        </section>
 
-  <div class="section">
-    <h2>⬇️ تثبيت التطبيق</h2>
-    <p>اضغط على زر التثبيت لإضافة التطبيق على جهازك.</p>
-    <a id="installBtn" class="btn" style="display:none;">تثبيت التطبيق</a>
-  </div>
+        <section id="workouts-section" class="card">
+            <h2>🔥 تمرين اليوم</h2>
+            <div class="workout-item">
+                <h3>تمرين الضغط (Push-ups)</h3>
+                <p>المجموعات: 3 | التكرارات: 15</p>
+                <div class="timer-display">00:00</div>
+                <button class="btn secondary start-timer">بدء المؤقت</button>
+            </div>
+        </section>
+        
+        <section id="tools-section" class="card">
+            <h2>📊 حاسبة مؤشر كتلة الجسم (BMI)</h2>
+            <label for="weight">الوزن (كجم):</label>
+            <input type="number" id="weight" placeholder="مثال: 75">
+            
+            <label for="height">الطول (سم):</label>
+            <input type="number" id="height" placeholder="مثال: 175">
+            
+            <button class="btn primary" onclick="calculateBMI()">احسب</button>
+            <p id="bmi-result"></p>
+        </section>
+    </main>
 
-  <script>
-    // Register service worker
-    if ("serviceWorker" in navigator) {
-      navigator.serviceWorker.register("/Allowance-Gymaweya/sw.js");
-    }
+    <nav class="bottom-nav">
+        <a href="#profile-section">👤 الملف الشخصي</a>
+        <a href="#workouts-section">🏋️ التمارين</a>
+        <a href="#tools-section">🧮 الأدوات</a>
+    </nav>
 
-    let deferredPrompt;
-    const btn = document.getElementById("installBtn");
-
-    window.addEventListener("beforeinstallprompt", (e) => {
-      e.preventDefault();
-      deferredPrompt = e;
-      btn.style.display = "inline-block";
-    });
-
-    btn.addEventListener("click", () => {
-      deferredPrompt.prompt();
-      btn.style.display = "none";
-    });
-  </script>
-
+    <script src="js/app.js"></script>
 </body>
 </html>
