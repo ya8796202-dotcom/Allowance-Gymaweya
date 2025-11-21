@@ -1,0 +1,11 @@
+:root { --bg:#f4f4f4; --fg:#333; --card:#fff; --primary:#222; }
+* { box-sizing:border-box; }
+body { margin:0; font-family:Tahoma,system-ui,sans-serif; background:var(--bg); color:var(--fg); direction:rtl; text-align:center; }
+.app-header { background:var(--primary); color:#fff; padding:20px; }
+.app-main { padding:20px; max-width:680px; margin:0 auto; }
+.card { margin:16px 0; background:var(--card); padding:16px; border-radius:10px; box-shadow:0 4px 12px rgba(0,0,0,0.06); }
+.actions { margin-top:20px; }
+.install-btn { display:none; padding:10px 18px; font-size:16px; background:var(--primary); color:#fff; border:none; border-radius:8px; cursor:pointer; }
+.install-btn:hover { opacity:0.9; }
+.hint { font-size:12px; color:#666; margin-top:10px; }
+.app-footer { padding:20px; color:#666; }
