@@ -1,0 +1,22 @@
+{
+  "name": "المدرب الشخصي للياقة",
+  "short_name": "مدربي",
+  "description": "تطبيق متكامل لتمارين وخطط اللياقة البدنية.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#FF4500",
+  "icons": [
+    {
+      "src": "icons/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icons/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
