@@ -1,0 +1,145 @@
+<!-- index.html for Fitness Website + PWA Template
+     ملاحظة: انسخ كل ملف لملف منفصل بنفس الاسم عند رفعه على GitHub Pages.
+-->
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>موقع اللياقة البدنية</title>
+
+  <!-- Manifest -->
+  <link rel="manifest" href="manifest.json" />
+
+  <!-- Icons -->
+  <link rel="icon" href="icons/icon-192.png" />
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      background: #f5f5f5;
+      color: #333;
+      line-height: 1.6;
+    }
+    header {
+      background: #111;
+      color: #fff;
+      padding: 20px;
+      text-align: center;
+    }
+    .section {
+      padding: 20px;
+      margin: 15px;
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0px 2px 5px rgba(0,0,0,0.1);
+    }
+    .btn {
+      display: inline-block;
+      background: #111;
+      color: #fff;
+      padding: 10px 20px;
+      border-radius: 8px;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>موقع اللياقة البدنية</h1>
+    <p>تمارين – تغذية – نصائح – خطط تدريب</p>
+  </header>
+
+  <div class="section">
+    <h2>💪 تمارين اليوم</h2>
+    <ul>
+      <li>تمرين الضغط – 3 مجموعات × 15</li>
+      <li>سكوات – 3 مجموعات × 20</li>
+      <li>بلانك – دقيقة × 3</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2>🍎 نصائح تغذية</h2>
+    <p>حافظ على شرب الماء، وزوّد البروتين في أكلك اليومي.</p>
+  </div>
+
+  <div class="section">
+    <h2>⬇️ تثبيت الموقع</h2>
+    <p>الموقع قابل للتثبيت كـ PWA على الموبايل والكمبيوتر.</p>
+    <a class="btn" id="installBtn" style="display:none;">تثبيت التطبيق</a>
+  </div>
+
+  <script>
+    // Register Service Worker
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('sw.js');
+    }
+
+    // PWA Install Button
+    let deferredPrompt;
+    const installBtn = document.getElementById('installBtn');
+
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      installBtn.style.display = 'inline-block';
+    });
+
+    installBtn.addEventListener('click', () => {
+      deferredPrompt.prompt();
+      deferredPrompt = null;
+      installBtn.style.display = 'none';
+    });
+  </script>
+</body>
+</html>
+
+
+<!-- manifest.json (احفظه كملف منفصل) -->
+<!--
+{
+  "name": "موقع اللياقة البدنية",
+  "short_name": "Fitness",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#111111",
+  "icons": [
+    {
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
+-->
+
+
+<!-- sw.js (Service Worker) احفظه كملف منفصل) -->
+<!--
+const cacheName = 'fitness-cache-v1';
+const filesToCache = [
+  '/',
+  '/index.html',
+  '/manifest.json'
+];
+
+self.addEventListener('install', (e) => {
+  e.waitUntil(
+    caches.open(cacheName).then((cache) => cache.addAll(filesToCache))
+  );
+});
+
+self.addEventListener('fetch', (e) => {
+  e.respondWith(
+    caches.match(e.request).then((response) => response || fetch(e.request))
+  );
+});
+-->
