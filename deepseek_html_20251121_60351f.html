@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تطبيق اللياقة البدنية - Fitness App</title>
+    <link rel="stylesheet" href="./styles.css">
+    <link rel="manifest" href="./manifest.json">
+    <link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=">
+    <meta name="theme-color" content="#667eea"/>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo-container">
+                <div class="app-logo">💪</div>
+            </div>
+            <h1>تطبيق اللياقة</h1>
+            <p>احصل على جسم مثالي</p>
+        </header>
+
+        <div class="stats">
+            <div class="stat-card">
+                <h3>👣 الخطوات</h3>
+                <p id="steps">0</p>
+            </div>
+            <div class="stat-card">
+                <h3>🔥 السعرات</h3>
+                <p id="calories">0</p>
+            </div>
+        </div>
+
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+        </div>
+
+        <div class="exercises">
+            <h2>🏋️ التمارين اليومية</h2>
+            <div class="exercise-list">
+                <!-- سيتم تحميل التمارين ديناميكياً -->
+            </div>
+        </div>
+
+        <button class="history-btn" onclick="toggleHistory()">
+            📊 عرض سجل التمارين
+        </button>
+
+        <div class="history-panel" id="historyPanel">
+            <!-- سيتم تحميل التاريخ هنا -->
+        </div>
+
+        <div class="timer" id="timer" style="display: none;">
+            <h2 id="exerciseName"></h2>
+            <div class="time-circle">
+                <span id="timeLeft">0</span>
+            </div
