@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>💪 موقع فتنس بسيط</title>
+  <style>
+    body {
+      font-family: Tahoma, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f4f4f4;
+      color: #333;
+      text-align: center;
+    }
+    header {
+      background: #222;
+      color: #fff;
+      padding: 20px;
+    }
+    main {
+      padding: 20px;
+    }
+    section {
+      margin: 20px 0;
+      background: #fff;
+      padding: 15px;
+      border-radius: 8px;
+    }
+    #installBtn {
+      padding: 10px 20px;
+      font-size: 16px;
+      background: #222;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      display: none;
+    }
+  </style>
+
+  <!-- Manifest داخل الصفحة -->
+  <link rel="manifest" href="data:application/manifest+json,{
+    &quot;name&quot;:&quot;موقع فتنس بسيط&quot;,
+    &quot;short_name&quot;:&quot;فتنس&quot;,
+    &quot;start_url&quot;:&quot;.&quot;,
+    &quot;display&quot;:&quot;standalone&quot;,
+    &quot;background_color&quot;:&quot;#ffffff&quot;,
+    &quot;theme_color&quot;:&quot;#222222&quot;
+  }">
+</head>
+<body>
+  <header>
+    <h1>💪 موقع الفتنس</h1>
+    <p>خطط تمرين وتغذية بشكل بسيط</p>
+  </header>
+
+  <main>
+    <section>
+      <h2>تمارين اليوم</h2>
+      <ul>
+        <li>تمارين ضغط × 3 مجموعات</li>
+        <li>سكوات × 3 مجموعات</li>
+        <li>بلانك 60 ثانية</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>نصائح غذائية</h2>
+      <p>اشرب 3 لتر ماء يوميًا وحافظ على البروتين.</p>
+    </section>
+
+    <button id="installBtn">📲 تثبيت التطبيق</button>
+  </main>
+
+  <footer>
+    <p>© 2025 موقع فتنس بسيط</p>
+  </footer>
+
+  <script>
+    // Service Worker بسيط
+    const swCode = `
+      self.addEventListener("install", event => {
+        event.waitUntil(
+          caches.open("fitness-cache").then(cache => {
+            return cache.addAll(["./"]);
+          })
+        );
+      });
+      self.addEventListener("fetch", event => {
+        event.respondWith(
+          caches.match(event.request).then(response => {
+            return response || fetch(event.request);
+          })
+        );
+      });
+    `;
+    const blob = new Blob([swCode], { type: "text/javascript" });
+    const swUrl = URL.createObjectURL(blob);
+
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.register(swUrl)
+        .then(() => console.log("Service Worker مسجل ✅"))
+        .catch(err => console.error("فشل التسجيل:", err));
+    }
+
+    // زر التثبيت
+    let deferredPrompt;
+    const installBtn = document.getElementById("installBtn");
+
+    window.addEventListener("beforeinstallprompt", (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      installBtn.style.display = "inline-block";
+    });
+
+    installBtn.addEventListener("click", () => {
+      if (deferredPrompt) {
+        deferredPrompt.prompt();
+        deferredPrompt.userChoice.then((choiceResult) => {
+          if (choiceResult.outcome === "accepted") {
+            console.log("المستخدم وافق على التثبيت ✅");
+          } else {
+            console.log("المستخدم رفض التثبيت ❌");
+          }
+          deferredPrompt = null;
+        });
+      }
+    });
+  </script>
+</body>
+</html>
